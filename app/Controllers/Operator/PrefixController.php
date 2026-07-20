@@ -10,9 +10,20 @@ class PrefixController extends Controller
     public function index()
     {
         $prefixModel = new PhonePrefixModel();
-        $prefixes = $prefixModel->orderBy('prefix', 'ASC')->findAll();
+        $db = \Config\Database::connect();
+        
+        $prefixes = $db->table('phone_prefixes')
+            ->select('phone_prefixes.*, operators.name as operator_name')
+            ->join('operators', 'operators.id = phone_prefixes.operator_id', 'left')
+            ->orderBy('phone_prefixes.prefix', 'ASC')
+            ->get()->getResultArray();
 
-        return view('operator/prefixes/index', ['prefixes' => $prefixes]);
+        $operators = $db->table('operators')->where('is_active', 1)->get()->getResultArray();
+
+        return view('operator/prefixes/index', [
+            'prefixes' => $prefixes,
+            'operators' => $operators
+        ]);
     }
 
     public function store()
@@ -21,6 +32,7 @@ class PrefixController extends Controller
         
         $data = [
             'prefix' => $this->request->getPost('prefix'),
+            'operator_id' => $this->request->getPost('operator_id') ?: null,
             'is_active' => $this->request->getPost('is_active') ? 1 : 0
         ];
 

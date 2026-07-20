@@ -120,11 +120,34 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-12">
+            <div class="col-md-6">
                 <div class="card h-100 bg-light">
                     <div class="card-body text-center">
                         <h6 class="card-title text-muted">Nombre de Transferts Inter-Opérateurs</h6>
                         <h2 class="card-text fw-bold text-dark"><?= $externalStats['count_external'] ?? 0 ?></h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card h-100 shadow-sm" style="border: 1px solid #FFC107;">
+                    <div class="card-header" style="background-color: #FFC107; color: black;">
+                        <h6 class="mb-0 fw-bold"><i class="bi bi-bank"></i> Montants à envoyer par Opérateur</h6>
+                    </div>
+                    <div class="card-body p-0">
+                        <ul class="list-group list-group-flush">
+                            <?php if (empty($commissionsByOperator)): ?>
+                                <li class="list-group-item text-muted text-center py-4">Aucun montant à envoyer.</li>
+                            <?php else: ?>
+                                <?php foreach($commissionsByOperator as $opComm): ?>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span class="fw-bold fs-5"><?= htmlspecialchars($opComm['operator_name']) ?></span>
+                                    <span class="badge rounded-pill fs-6" style="background-color: #FFC107; color: black; border: 1px solid black;">
+                                        <?= number_format($opComm['total_commission'], 2, ',', ' ') ?> Ar
+                                    </span>
+                                </li>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </ul>
                     </div>
                 </div>
             </div>

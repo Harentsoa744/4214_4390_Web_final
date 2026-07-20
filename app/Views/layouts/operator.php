@@ -65,6 +65,16 @@
                             <i class="bi bi-people"></i> Comptes Clients
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?= url_is('operator/commissions*') ? 'active' : '' ?>" href="<?= site_url('operator/commissions') ?>">
+                            <i class="bi bi-percent"></i> Gestion des commissions
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?= url_is('operator/settlements*') ? 'active' : '' ?>" href="<?= site_url('operator/settlements') ?>">
+                            <i class="bi bi-bank"></i> Situation des reversements
+                        </a>
+                    </li>
                 </ul>
             </div>
         </nav>

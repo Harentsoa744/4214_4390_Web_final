@@ -13,28 +13,48 @@ class AuthController extends Controller
         if (session()->get('client_id')) {
             return redirect()->to('/client/dashboard');
         }
-        return view('auth/client_login');
+
+        // Fetch main operator prefixes
+        $prefixModel = new PhonePrefixModel();
+        $db = \Config\Database::connect();
+        
+        $mainOperatorPrefixes = $db->table('phone_prefixes')
+            ->select('phone_prefixes.prefix')
+            ->join('operators', 'operators.id = phone_prefixes.operator_id')
+            ->where('operators.is_main_operator', 1)
+            ->where('phone_prefixes.is_active', 1)
+            ->get()
+            ->getResultArray();
+
+        return view('auth/client_login', ['prefixes' => $mainOperatorPrefixes]);
     }
 
     public function processLogin()
     {
-        $phoneNumber = $this->request->getPost('phone_number');
+        $prefixInput = $this->request->getPost('prefix');
+        $numberInput = $this->request->getPost('phone_number');
 
-        if (!$phoneNumber || !preg_match('/^[0-9]{10}$/', $phoneNumber)) {
-            return redirect()->back()->with('error', 'Le numéro de téléphone doit contenir exactement 10 chiffres.');
+        if (!$prefixInput || !$numberInput || !preg_match('/^[0-9]{7}$/', $numberInput)) {
+            return redirect()->back()->with('error', 'Le numéro de téléphone (hors préfixe) doit contenir exactement 7 chiffres.');
         }
 
+        $phoneNumber = $prefixInput . $numberInput;
+
+        $db = \Config\Database::connect();
         $prefixModel = new PhonePrefixModel();
         $clientModel = new ClientModel();
 
-        // Extraire le préfixe (ex: 034 de 0340000001)
-        $prefix = substr($phoneNumber, 0, 3);
-        
-        // Vérifier si le préfixe est valide et actif
-        $validPrefix = $prefixModel->where('prefix', $prefix)->where('is_active', 1)->first();
+        // Vérifier si le préfixe appartient à l'opérateur principal
+        $validPrefix = $db->table('phone_prefixes')
+            ->join('operators', 'operators.id = phone_prefixes.operator_id')
+            ->where('phone_prefixes.prefix', $prefixInput)
+            ->where('operators.is_main_operator', 1)
+            ->where('phone_prefixes.is_active', 1)
+            ->get()
+            ->getRow();
         
         if (!$validPrefix) {
-            return redirect()->back()->with('error', 'Préfixe invalide ou non pris en charge par l\'opérateur.');
+            return redirect()->back()->with('error', 'Ce préfixe n\'est pas autorisé pour la connexion.');
         }
 
         // Vérifier si le client existe

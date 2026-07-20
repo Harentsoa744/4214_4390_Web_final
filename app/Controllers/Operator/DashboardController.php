@@ -64,6 +64,23 @@ class DashboardController extends Controller
         $externalStats['total_revenue_for_main'] = $externalStats['fee_external'] ?? 0;
         $externalStats['total_commissions_generated'] = $externalStats['commission_external'] ?? 0; // dûs aux autres
 
+        // --- COMMISSIONS PAR OPÉRATEUR EXTERNE ---
+        $commissionsByOpBuilder = $db->table('transactions t')
+            ->select('
+                op.name as operator_name,
+                SUM(t.commission_amount) as total_commission
+            ')
+            ->join('operators op', 'op.id = t.destination_operator_id')
+            ->where('t.transfer_type', 'INTER_OPERATOR')
+            ->where('op.is_main_operator', 0)
+            ->groupBy('op.id');
+
+        if ($startDate) $commissionsByOpBuilder->where('t.created_at >=', $startDate . ' 00:00:00');
+        if ($endDate) $commissionsByOpBuilder->where('t.created_at <=', $endDate . ' 23:59:59');
+        if ($destOperator) $commissionsByOpBuilder->where('t.destination_operator_id', $destOperator);
+
+        $commissionsByOperator = $commissionsByOpBuilder->get()->getResultArray();
+
         // --- TRANSACTIONS DÉTAILLÉES (Gains) ---
         $gainsBuilder = $db->table('transactions t')
             ->select('
@@ -95,6 +112,7 @@ class DashboardController extends Controller
         return view('operator/dashboard', [
             'internalStats' => $internalStats,
             'externalStats' => $externalStats,
+            'commissionsByOperator' => $commissionsByOperator,
             'feeTransactions' => $feeTransactions,
             'operationTypes' => $operationTypes,
             'operators' => $operators,

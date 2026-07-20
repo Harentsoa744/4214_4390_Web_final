@@ -19,9 +19,16 @@
                         <div class="mb-4">
                             <div class="input-group input-group-lg">
                                 <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                                <select name="prefix" class="form-select" style="max-width: 100px; font-size: 0.8rem;" required>
+                                    <?php if(isset($prefixes) && is_array($prefixes)): ?>
+                                        <?php foreach($prefixes as $p): ?>
+                                            <option value="<?= htmlspecialchars($p['prefix']) ?>"><?= htmlspecialchars($p['prefix']) ?></option>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
+                                </select>
                                 <input type="text" name="phone_number" class="form-control"
-                                    placeholder="(ex: 0340000001)" required pattern="^[0-9]{10}$"
-                                    title="Veuillez saisir un numéro à 10 chiffres." style="font-size: 0.8rem;">
+                                    placeholder="(ex: 0000001)" required pattern="^[0-9]{7}$"
+                                    title="Veuillez saisir les 7 derniers chiffres." style="font-size: 0.8rem;">
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary btn-lg w-100 rounded">Accéder à mon compte</button>

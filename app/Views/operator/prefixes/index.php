@@ -21,6 +21,15 @@
                         <label class="form-label">Préfixe (ex: 034)</label>
                         <input type="text" name="prefix" class="form-control" required pattern="[0-9]{3,5}">
                     </div>
+                    <div class="mb-3">
+                        <label class="form-label">Opérateur</label>
+                        <select name="operator_id" class="form-select" required>
+                            <option value="">Sélectionner un opérateur...</option>
+                            <?php foreach($operators as $op): ?>
+                                <option value="<?= $op['id'] ?>"><?= htmlspecialchars($op['name']) ?> <?= $op['is_main_operator'] ? '(Principal)' : '(Externe)' ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
                     <div class="mb-3 form-check">
                         <input type="checkbox" class="form-check-input" name="is_active" value="1" id="is_active" checked>
                         <label class="form-check-label" for="is_active">Actif</label>
@@ -39,6 +48,7 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Préfixe</th>
+                                <th>Opérateur</th>
                                 <th>Statut</th>
                                 <th class="text-end">Actions</th>
                             </tr>
@@ -48,6 +58,7 @@
                             <tr>
                                 <td><?= $prefix['id'] ?></td>
                                 <td><strong><?= htmlspecialchars($prefix['prefix']) ?></strong></td>
+                                <td><?= htmlspecialchars($prefix['operator_name'] ?? 'Non assigné') ?></td>
                                 <td>
                                     <?php if($prefix['is_active']): ?>
                                         <span class="badge" style="background-color: #1fa25c; color: white; border: 2px solid black;">Actif</span>
@@ -73,7 +84,7 @@
                             <?php endforeach; ?>
                             <?php if(empty($prefixes)): ?>
                             <tr>
-                                <td colspan="4" class="text-center">Aucun préfixe trouvé.</td>
+                                <td colspan="5" class="text-center">Aucun préfixe trouvé.</td>
                             </tr>
                             <?php endif; ?>
                         </tbody>

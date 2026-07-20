@@ -3,20 +3,20 @@
 namespace App\Services;
 
 use App\Models\OperationTypeModel;
-use App\Models\OperatorCommissionModel;
+use App\Models\CommissionModel;
 
 class TransferCostCalculatorService
 {
     protected FeeCalculatorService $feeCalculator;
     protected OperatorResolverService $operatorResolver;
-    protected OperatorCommissionModel $commissionModel;
+    protected CommissionModel $commissionModel;
     protected OperationTypeModel $operationTypeModel;
 
     public function __construct()
     {
         $this->feeCalculator = new FeeCalculatorService();
         $this->operatorResolver = new OperatorResolverService();
-        $this->commissionModel = new OperatorCommissionModel();
+        $this->commissionModel = new CommissionModel();
         $this->operationTypeModel = new OperationTypeModel();
     }
 
@@ -46,10 +46,11 @@ class TransferCostCalculatorService
 
         // 2. Commission inter-opérateur
         $commissionAmount = 0.00;
+        
+        // La commission s'applique si l'opérateur destinataire n'est pas le même que l'expéditeur principal
         if ($transferType === 'INTER_OPERATOR') {
             $commissionConfig = $this->commissionModel
-                ->where('source_operator_id', $senderOperator['id'])
-                ->where('destination_operator_id', $receiverOperator['id'])
+                ->where('operator_id', $receiverOperator['id'])
                 ->where('is_active', 1)
                 ->first();
             
@@ -61,7 +62,8 @@ class TransferCostCalculatorService
 
         // 3. Frais de retrait (si inclus)
         $withdrawalFee = 0.00;
-        if ($includeWithdrawalFee) {
+        // Les frais de retrait ne s'appliquent qu'aux transferts internes
+        if ($includeWithdrawalFee && $transferType === 'INTERNAL') {
             $withdrawalOpType = $this->operationTypeModel->where('code', 'WITHDRAWAL')->first();
             $withdrawalFee = $this->feeCalculator->calculateFee((int)$withdrawalOpType['id'], $amount);
         }

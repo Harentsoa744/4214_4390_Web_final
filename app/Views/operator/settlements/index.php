@@ -37,8 +37,8 @@
                             <span class="fw-semibold"><?= number_format($s['total_transfer_amount'], 2, ',', ' ') ?> Ar</span>
                         </div>
                         <div class="d-flex justify-content-between mb-2">
-                            <span class="text-muted">Commissions dues:</span>
-                            <span class="fw-semibold text-warning">+ <?= number_format($s['total_commission'], 2, ',', ' ') ?> Ar</span>
+                            <span class="text-muted">Commissions perçues (Opérateur principal):</span>
+                            <span class="fw-semibold text-info"><?= number_format($s['total_commission'], 2, ',', ' ') ?> Ar</span>
                         </div>
                         <hr>
                         <div class="d-flex justify-content-between align-items-center mb-3">

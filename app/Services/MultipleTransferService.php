@@ -77,10 +77,24 @@ class MultipleTransferService
             foreach ($receiverPhones as $receiverPhone) {
                 $receiver = $this->clientModel->where('phone_number', $receiverPhone)->first();
                 if (!$receiver) {
-                    throw new \Exception("Le numéro du destinataire {$receiverPhone} n'existe pas.");
+                    $operatorResolver = new \App\Services\OperatorResolverService();
+                    $receiverOp = $operatorResolver->resolveOperator($receiverPhone);
+                    if (!$receiverOp) {
+                        throw new \Exception("Le numéro du destinataire {$receiverPhone} est invalide (préfixe inconnu).");
+                    }
+                    $newClientId = $this->clientModel->insert([
+                        'phone_number' => $receiverPhone,
+                        'balance'      => 0.00,
+                        'status'       => 'active'
+                    ]);
+                    $receiver = $this->clientModel->find($newClientId);
                 }
 
                 $costs = $this->costCalculator->calculateCosts($senderPhone, $receiverPhone, $amountPerRecipient, $includeWithdrawalFee);
+                
+                if ($recipientCount > 1 && $costs['transfer_type'] === 'INTER_OPERATOR') {
+                    throw new \Exception("L'envoi multiple est uniquement autorisé vers les numéros de notre opérateur (numéro invalide : {$receiverPhone}).");
+                }
                 
                 $totalFees += $costs['transfer_fee'] + $costs['withdrawal_fee'];
                 $totalCommissions += $costs['commission_amount'];

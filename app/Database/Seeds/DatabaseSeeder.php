@@ -8,6 +8,8 @@ class DatabaseSeeder extends Seeder
 {
     public function run()
     {
+        $this->call('CommissionSeeder');
+        
         // 1. Operator — vérifier si admin existe déjà
         $existingAdmin = $this->db->table('operators')->where('username', 'admin')->get()->getRow();
         if (!$existingAdmin) {

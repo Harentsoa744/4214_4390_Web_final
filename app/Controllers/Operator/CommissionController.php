@@ -2,53 +2,54 @@
 
 namespace App\Controllers\Operator;
 
+use App\Models\CommissionModel;
 use CodeIgniter\Controller;
-use App\Models\OperatorCommissionModel;
-use App\Models\OperatorModel;
 
 class CommissionController extends Controller
 {
     public function index()
     {
-        $commissionModel = new OperatorCommissionModel();
-        $operatorModel = new OperatorModel();
-
-        $mainOperator = $operatorModel->where('is_main_operator', 1)->first();
-        $externalOperators = $operatorModel->where('is_main_operator', 0)->findAll();
+        $commissionModel = new CommissionModel();
         
-        $commissions = $commissionModel->findAll();
-
+        // On récupère la première commission configurée (s'il y en a une), car elle est unique pour tous les autres opérateurs
+        $globalCommission = $commissionModel->first();
+        
         return view('operator/commissions/index', [
-            'mainOperator' => $mainOperator,
-            'externalOperators' => $externalOperators,
-            'commissions' => $commissions
+            'commission_percentage' => $globalCommission ? $globalCommission['commission_percentage'] : 0,
+            'is_active' => $globalCommission ? $globalCommission['is_active'] : 1
         ]);
     }
 
     public function store()
     {
-        $commissionModel = new OperatorCommissionModel();
+        $commissionModel = new CommissionModel();
+        $db = \Config\Database::connect();
         
-        $sourceId = $this->request->getPost('source_operator_id');
-        $destId = $this->request->getPost('destination_operator_id');
         $percentage = $this->request->getPost('commission_percentage');
+        $isActive = $this->request->getPost('is_active') ? 1 : 0;
 
-        // Check if exists
-        $existing = $commissionModel->where('source_operator_id', $sourceId)
-                                    ->where('destination_operator_id', $destId)
-                                    ->first();
-
-        if ($existing) {
-            $commissionModel->update($existing['id'], ['commission_percentage' => $percentage]);
-        } else {
-            $commissionModel->insert([
-                'source_operator_id' => $sourceId,
-                'destination_operator_id' => $destId,
-                'commission_percentage' => $percentage,
-                'is_active' => 1
-            ]);
+        if (!is_numeric($percentage) || $percentage < 0) {
+            return redirect()->back()->with('error', 'Le pourcentage doit être un nombre positif.');
         }
 
-        return redirect()->to('operator/commissions')->with('success', 'Commission configurée avec succès.');
+        $externalOperators = $db->table('operators')->where('is_main_operator', 0)->get()->getResultArray();
+
+        foreach ($externalOperators as $op) {
+            $existing = $commissionModel->where('operator_id', $op['id'])->first();
+            if ($existing) {
+                $commissionModel->update($existing['id'], [
+                    'commission_percentage' => $percentage,
+                    'is_active' => $isActive
+                ]);
+            } else {
+                $commissionModel->insert([
+                    'operator_id' => $op['id'],
+                    'commission_percentage' => $percentage,
+                    'is_active' => $isActive
+                ]);
+            }
+        }
+
+        return redirect()->to('operator/commissions')->with('success', 'Commission globale configurée avec succès pour tous les opérateurs externes.');
     }
 }

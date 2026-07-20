@@ -49,9 +49,8 @@ class SettlementService
             $totalAmount = (float) ($query['total_amount'] ?? 0);
             $totalCommission = (float) ($query['total_commission'] ?? 0);
             
-            // Le montant à reverser = Le montant total envoyé + la commission due à l'opérateur externe
-            // (La commission inter-opérateur est versée à l'opérateur destinataire)
-            $amountToSettle = $totalAmount + $totalCommission;
+            // Le montant à reverser = Le montant total envoyé (la commission reste chez l'opérateur principal)
+            $amountToSettle = $totalAmount;
 
             // Vérifier si on a déjà un settlement en cours
             $existing = $this->settlementModel->where('destination_operator_id', $extOp['id'])->first();

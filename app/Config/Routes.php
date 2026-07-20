@@ -69,6 +69,8 @@ $routes->group('operator', ['namespace' => 'App\Controllers\Operator', 'filter' 
     // V2: Commissions Management
     $routes->get('commissions', 'CommissionController::index');
     $routes->post('commissions', 'CommissionController::store');
+    $routes->post('commissions/toggle/(:num)', 'CommissionController::toggle/$1');
+    $routes->post('commissions/delete/(:num)', 'CommissionController::delete/$1');
     
     // V2: Settlements
     $routes->get('settlements', 'SettlementController::index');
