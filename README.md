@@ -1,69 +1,56 @@
-# CodeIgniter 4 Application Starter
+# Simulateur Mobile Money
 
-## What is CodeIgniter?
+Projet CodeIgniter 4 simulant un opérateur de Mobile Money, développé dans le cadre de l'évaluation "4214_4390_Web_final".
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+## Présentation
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+Ce projet est une application web complète (Version 1) permettant de simuler :
+- **Un espace Opérateur** pour configurer le système (préfixes, frais, types d'opérations) et consulter les revenus.
+- **Un espace Client** pour effectuer des dépôts, retraits et transferts avec calcul automatique des frais.
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+## Technologies
+- **Backend :** PHP, CodeIgniter 4
+- **Base de données :** SQLite (embarqué)
+- **Frontend :** HTML5, CSS3, JavaScript Vanilla, Bootstrap 5
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+## Structure
 
-## Installation & updates
+Le code suit l'architecture MVC de CodeIgniter 4 :
+- Les **Contrôleurs** sont séparés pour les espaces Client (`app/Controllers`) et Opérateur (`app/Controllers/Operator`).
+- Les **Modèles** gèrent la base de données.
+- La logique métier (calcul des frais, transactions) est centralisée dans `app/Services`.
+- Les vues utilisent Bootstrap 5 dans `app/Views`.
 
-`composer create-project codeigniter4/appstarter` then `composer update` whenever
-there is a new release of the framework.
+## Installation et Configuration
 
-When updating, check the release notes to see if there are any changes you might need to apply
-to your `app` folder. The affected files can be copied or merged from
-`vendor/codeigniter4/framework/app`.
+1. **Prérequis :** PHP 8.1+, Composer, extension SQLite3 activée.
+2. Cloner le projet.
+3. Installer les dépendances :
+   ```bash
+   composer install
+   ```
+4. Démarrer l'application :
+   ```bash
+   php spark serve
+   ```
 
-## Setup
+La base de données est déjà configurée et peuplée grâce aux migrations et au seeder qui ont été exécutés, ainsi qu'au fichier `base.sql` présent à la racine.
 
-Copy `env` to `.env` and tailor for your app, specifically the baseURL
-and any database settings.
+## Comptes de Démonstration
 
-## Important Change with index.php
+### Opérateur
+- **Nom d'utilisateur :** admin
+- **Mot de passe :** admin123
+- **URL :** `http://localhost:8080/operator/login`
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+### Clients (Exemples)
+La connexion client se fait uniquement par numéro de téléphone. Si le numéro n'existe pas, le compte est créé automatiquement (à condition que le préfixe soit valide, par exemple `034`).
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+- `0340000001` (Solde: 50 000 Ar)
+- `0320000002` (Solde: 150 000 Ar)
+- **URL :** `http://localhost:8080/login`
 
-**Please** read the user guide for a better explanation of how CI4 works!
+## Membres du Binôme
 
-## Repository Management
-
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
-
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
-
-## Server Requirements
-
-PHP version 8.2 or higher is required, with the following extensions installed:
-
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
-
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - The end of life date for PHP 8.1 was December 31, 2025.
-> - If you are still using below PHP 8.2, you should upgrade immediately.
-> - The end of life date for PHP 8.2 will be December 31, 2026.
-
-Additionally, make sure that the following extensions are enabled in your PHP:
-
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+- Étudiant 1 (Backend & DB)
+- Étudiant 2 (Frontend & UI)
