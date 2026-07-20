@@ -4,15 +4,18 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class OperatorModel extends Model
+class TransferBatchModel extends Model
 {
-    protected $table            = 'operators';
+    protected $table            = 'transfer_batches';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['username', 'password_hash', 'name', 'code', 'is_main_operator', 'is_active'];
+    protected $allowedFields    = [
+        'sender_client_id', 'total_amount', 'total_fee', 
+        'total_commission', 'include_withdrawal_fee', 'status'
+    ];
 
     protected bool $allowEmptyInserts = false;
 
@@ -20,6 +23,6 @@ class OperatorModel extends Model
     protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
-    protected $updatedField  = 'updated_at';
+    protected $updatedField  = '';
     protected $deletedField  = '';
 }

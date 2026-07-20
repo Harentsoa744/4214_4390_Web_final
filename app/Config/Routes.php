@@ -60,4 +60,17 @@ $routes->group('operator', ['namespace' => 'App\Controllers\Operator', 'filter' 
     // Clients
     $routes->get('clients', 'ClientController::index');
     $routes->get('clients/(:num)', 'ClientController::show/$1');
+
+    // V2: Operators Management
+    $routes->get('operators', 'OperatorManagementController::index');
+    $routes->post('operators', 'OperatorManagementController::store');
+    $routes->post('operators/toggle/(:num)', 'OperatorManagementController::toggle/$1');
+
+    // V2: Commissions Management
+    $routes->get('commissions', 'CommissionController::index');
+    $routes->post('commissions', 'CommissionController::store');
+    
+    // V2: Settlements
+    $routes->get('settlements', 'SettlementController::index');
+    $routes->post('settlements/markAsSent/(:num)', 'SettlementController::markAsSent/$1');
 });

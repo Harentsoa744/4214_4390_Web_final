@@ -12,7 +12,7 @@ class PhonePrefixModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['prefix', 'is_active'];
+    protected $allowedFields    = ['prefix', 'operator_id', 'is_active'];
 
     protected bool $allowEmptyInserts = false;
 

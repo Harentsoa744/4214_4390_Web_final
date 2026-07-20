@@ -4,15 +4,18 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class OperatorModel extends Model
+class OperatorCommissionModel extends Model
 {
-    protected $table            = 'operators';
+    protected $table            = 'operator_commissions';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['username', 'password_hash', 'name', 'code', 'is_main_operator', 'is_active'];
+    protected $allowedFields    = [
+        'source_operator_id', 'destination_operator_id', 
+        'commission_percentage', 'is_active'
+    ];
 
     protected bool $allowEmptyInserts = false;
 

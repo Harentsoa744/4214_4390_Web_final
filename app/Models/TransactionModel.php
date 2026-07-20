@@ -13,8 +13,9 @@ class TransactionModel extends Model
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'transaction_reference', 'operation_type_id', 'sender_client_id', 
-        'receiver_client_id', 'amount', 'fee_amount', 'total_amount', 
+        'transaction_reference', 'batch_id', 'operation_type_id', 'sender_client_id', 
+        'receiver_client_id', 'destination_operator_id', 'transfer_type', 
+        'amount', 'fee_amount', 'commission_amount', 'total_amount', 
         'balance_before', 'balance_after', 'status'
     ];
 

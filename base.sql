@@ -1,23 +1,30 @@
 -- base.sql
--- Structure de la base de données pour la simulation Mobile Money
+-- Structure de la base de données pour la simulation Mobile Money (Version 2)
 
 PRAGMA foreign_keys = ON;
 
 -- 1. Table des opérateurs
 CREATE TABLE IF NOT EXISTS operators (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username VARCHAR(100) NOT NULL UNIQUE,
-    password_hash VARCHAR(255) NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    username VARCHAR(100) UNIQUE,
+    password_hash VARCHAR(255),
+    name VARCHAR(100),
+    code VARCHAR(50),
+    is_main_operator BOOLEAN DEFAULT 0,
+    is_active BOOLEAN DEFAULT 1,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 -- 2. Table des préfixes téléphoniques
 CREATE TABLE IF NOT EXISTS phone_prefixes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     prefix VARCHAR(10) NOT NULL UNIQUE,
+    operator_id INTEGER,
     is_active BOOLEAN NOT NULL DEFAULT 1,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (operator_id) REFERENCES operators(id) ON DELETE SET NULL
 );
 
 -- 3. Table des types d'opérations
@@ -44,7 +51,38 @@ CREATE TABLE IF NOT EXISTS fee_brackets (
     CHECK (fee_amount >= 0)
 );
 
--- 5. Table des clients
+-- 5. Table des commissions inter-opérateurs
+CREATE TABLE IF NOT EXISTS operator_commissions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    source_operator_id INTEGER NOT NULL,
+    destination_operator_id INTEGER NOT NULL,
+    commission_percentage DECIMAL(5, 2) NOT NULL,
+    is_active BOOLEAN DEFAULT 1,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (source_operator_id) REFERENCES operators(id) ON DELETE CASCADE,
+    FOREIGN KEY (destination_operator_id) REFERENCES operators(id) ON DELETE CASCADE
+);
+
+-- 6. Table des reversements (Settlements)
+CREATE TABLE IF NOT EXISTS settlements (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    destination_operator_id INTEGER NOT NULL,
+    period_start DATETIME NOT NULL,
+    period_end DATETIME NOT NULL,
+    total_transfer_amount DECIMAL(15, 2) DEFAULT 0.00,
+    total_commission DECIMAL(15, 2) DEFAULT 0.00,
+    amount_to_settle DECIMAL(15, 2) DEFAULT 0.00,
+    amount_settled DECIMAL(15, 2) DEFAULT 0.00,
+    status VARCHAR(50) DEFAULT 'PENDING',
+    settled_at DATETIME,
+    reference VARCHAR(100),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (destination_operator_id) REFERENCES operators(id) ON DELETE RESTRICT
+);
+
+-- 7. Table des clients
 CREATE TABLE IF NOT EXISTS clients (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     phone_number VARCHAR(20) NOT NULL UNIQUE,
@@ -55,25 +93,45 @@ CREATE TABLE IF NOT EXISTS clients (
     CHECK (balance >= 0)
 );
 
--- 6. Table des transactions
+-- 8. Table des lots de transferts (Batches)
+CREATE TABLE IF NOT EXISTS transfer_batches (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    sender_client_id INTEGER NOT NULL,
+    total_amount DECIMAL(15, 2) DEFAULT 0.00,
+    total_fee DECIMAL(15, 2) DEFAULT 0.00,
+    total_commission DECIMAL(15, 2) DEFAULT 0.00,
+    include_withdrawal_fee BOOLEAN DEFAULT 0,
+    status VARCHAR(50) DEFAULT 'COMPLETED',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (sender_client_id) REFERENCES clients(id) ON DELETE RESTRICT
+);
+
+-- 9. Table des transactions
 CREATE TABLE IF NOT EXISTS transactions (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     transaction_reference VARCHAR(50) NOT NULL UNIQUE,
+    batch_id INTEGER,
     operation_type_id INTEGER NOT NULL,
     sender_client_id INTEGER,
     receiver_client_id INTEGER,
+    destination_operator_id INTEGER,
+    transfer_type VARCHAR(20) DEFAULT 'INTERNAL',
     amount DECIMAL(15, 2) NOT NULL,
     fee_amount DECIMAL(15, 2) NOT NULL DEFAULT 0.00,
+    commission_amount DECIMAL(15, 2) NOT NULL DEFAULT 0.00,
     total_amount DECIMAL(15, 2) NOT NULL,
     balance_before DECIMAL(15, 2) NOT NULL,
     balance_after DECIMAL(15, 2) NOT NULL,
     status VARCHAR(20) NOT NULL DEFAULT 'completed', -- 'pending', 'completed', 'failed', 'cancelled'
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (batch_id) REFERENCES transfer_batches(id) ON DELETE CASCADE,
     FOREIGN KEY (operation_type_id) REFERENCES operation_types(id) ON DELETE RESTRICT,
     FOREIGN KEY (sender_client_id) REFERENCES clients(id) ON DELETE SET NULL,
     FOREIGN KEY (receiver_client_id) REFERENCES clients(id) ON DELETE SET NULL,
+    FOREIGN KEY (destination_operator_id) REFERENCES operators(id) ON DELETE RESTRICT,
     CHECK (amount > 0),
-    CHECK (fee_amount >= 0)
+    CHECK (fee_amount >= 0),
+    CHECK (commission_amount >= 0)
 );
 
 -- Index pour optimiser les recherches
@@ -86,21 +144,32 @@ CREATE INDEX IF NOT EXISTS idx_transactions_receiver ON transactions(receiver_cl
 CREATE INDEX IF NOT EXISTS idx_fee_brackets_operation ON fee_brackets(operation_type_id);
 
 -- ==========================================
--- INSERTION DES DONNÉES INITIALES
+-- INSERTION DES DONNÉES INITIALES (V2)
 -- ==========================================
 
 -- Opérateur de démo (admin / admin123)
 -- Le hash de "admin123" généré par password_hash('admin123', PASSWORD_BCRYPT)
-INSERT INTO operators (username, password_hash) VALUES 
-('admin', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm');
+INSERT INTO operators (id, username, password_hash, name, code, is_main_operator) VALUES 
+(1, 'admin', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 'OPERATEUR_A', 'OP_A', 1);
 
--- Préfixes téléphoniques par défaut
-INSERT INTO phone_prefixes (prefix, is_active) VALUES 
-('032', 1),
-('033', 1),
-('034', 1),
-('037', 1),
-('038', 1);
+-- Opérateurs externes
+INSERT INTO operators (id, username, password_hash, name, code, is_main_operator) VALUES 
+(2, 'op_b_dummy', 'dummy', 'OPERATEUR_B', 'OP_B', 0),
+(3, 'op_c_dummy', 'dummy', 'OPERATEUR_C', 'OP_C', 0);
+
+-- Préfixes téléphoniques par défaut avec affectation
+INSERT INTO phone_prefixes (prefix, operator_id, is_active) VALUES 
+('033', 1, 1),
+('037', 1, 1),
+('032', 2, 1),
+('031', 2, 1),
+('034', 3, 1),
+('035', 3, 1);
+
+-- Commissions inter-opérateurs (OP_A vers OP_B et OP_C)
+INSERT INTO operator_commissions (source_operator_id, destination_operator_id, commission_percentage) VALUES 
+(1, 2, 2.00),
+(1, 3, 3.00);
 
 -- Types d'opérations
 INSERT INTO operation_types (id, code, name, is_active) VALUES 

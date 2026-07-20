@@ -138,7 +138,7 @@ class TransactionService
         }
     }
 
-    public function transfer(int $senderId, string $receiverPhoneNumber, float $amount): array
+    public function transfer(int $senderId, string $receiverPhoneNumber, float $amount, bool $includeWithdrawalFee = false): array
     {
         $this->db->transStart();
 
@@ -153,34 +153,45 @@ class TransactionService
                 throw new \Exception("Vous ne pouvez pas effectuer un transfert vers vous-même.");
             }
 
-            $operationTypeId = $this->getOperationTypeId('TRANSFER');
-            $fee = $this->feeCalculator->calculateFee($operationTypeId, $amount);
+            $costCalculator = new TransferCostCalculatorService();
+            $costs = $costCalculator->calculateCosts($sender['phone_number'], $receiverPhoneNumber, $amount, $includeWithdrawalFee);
             
-            $totalAmount = $amount + $fee; // L'expéditeur paie le transfert + les frais
+            $totalDebited = $costs['total_debited']; 
             $senderBalanceBefore = (float) $sender['balance'];
 
-            if ($senderBalanceBefore < $totalAmount) {
-                throw new \Exception("Solde insuffisant pour couvrir le montant et les frais de $fee Ar.");
+            if ($senderBalanceBefore < $totalDebited) {
+                throw new \Exception("Solde insuffisant pour couvrir le montant total de l'opération.");
             }
 
-            $senderBalanceAfter = $senderBalanceBefore - $totalAmount;
+            $senderBalanceAfter = $senderBalanceBefore - $totalDebited;
+            
             $receiverBalanceBefore = (float) $receiver['balance'];
-            $receiverBalanceAfter = $receiverBalanceBefore + $amount;
+            // Le bénéficiaire reçoit le montant (incluant potentiellement les frais de retrait si l'expéditeur a payé pour lui)
+            $amountToCredit = $amount;
+            if ($includeWithdrawalFee) {
+                $amountToCredit += $costs['withdrawal_fee'];
+            }
+            $receiverBalanceAfter = $receiverBalanceBefore + $amountToCredit;
 
             // Update balances
             $this->clientModel->update($senderId, ['balance' => $senderBalanceAfter]);
             $this->clientModel->update($receiver['id'], ['balance' => $receiverBalanceAfter]);
 
-            // Save transaction (perspective de l'expéditeur pour le suivi)
+            $operationTypeId = $this->getOperationTypeId('TRANSFER');
+
+            // Save transaction
             $ref = 'TRF-' . strtoupper(uniqid());
             $this->transactionModel->insert([
                 'transaction_reference' => $ref,
                 'operation_type_id'     => $operationTypeId,
                 'sender_client_id'      => $senderId,
                 'receiver_client_id'    => $receiver['id'],
-                'amount'                => $amount,
-                'fee_amount'            => $fee,
-                'total_amount'          => $totalAmount,
+                'destination_operator_id' => $costs['destination_operator_id'],
+                'transfer_type'         => $costs['transfer_type'],
+                'amount'                => $amountToCredit,
+                'fee_amount'            => $costs['transfer_fee'] + $costs['withdrawal_fee'],
+                'commission_amount'     => $costs['commission_amount'],
+                'total_amount'          => $totalDebited,
                 'balance_before'        => $senderBalanceBefore,
                 'balance_after'         => $senderBalanceAfter,
                 'status'                => 'completed'
@@ -192,7 +203,7 @@ class TransactionService
                 throw new \Exception("Erreur lors du transfert.");
             }
 
-            return ['success' => true, 'reference' => $ref, 'fee' => $fee, 'total' => $totalAmount, 'balance_after' => $senderBalanceAfter];
+            return ['success' => true, 'reference' => $ref, 'fee' => $costs['transfer_fee'], 'commission' => $costs['commission_amount'], 'total' => $totalDebited, 'balance_after' => $senderBalanceAfter];
 
         } catch (\Exception $e) {
             $this->db->transRollback();

@@ -60,10 +60,18 @@
                         <div class="d-flex align-items-center">
                             <i class="bi <?= $icon ?> fs-2 me-3"></i>
                             <div>
-                                <h6 class="mb-0 fw-bold"><?= $desc ?></h6>
+                                <h6 class="mb-0 fw-bold">
+                                    <?= $desc ?>
+                                    <?php if($t['transfer_type'] == 'INTER_OPERATOR'): ?>
+                                        <span class="badge bg-warning text-dark border border-warning ms-2" style="font-size: 0.65rem;">Externe</span>
+                                    <?php endif; ?>
+                                </h6>
                                 <small class="text-muted"><?= date('d/m/Y H:i', strtotime($t['created_at'])) ?> • Réf: <?= $t['transaction_reference'] ?></small>
                                 <?php if($t['fee_amount'] > 0 && $isSender): ?>
                                     <br><small class="text-muted">Frais: <?= number_format($t['fee_amount'], 2, ',', ' ') ?> Ar</small>
+                                <?php endif; ?>
+                                <?php if($t['commission_amount'] > 0 && $isSender): ?>
+                                    <small class="text-muted ms-2">Commission: <?= number_format($t['commission_amount'], 2, ',', ' ') ?> Ar</small>
                                 <?php endif; ?>
                             </div>
                         </div>

@@ -73,20 +73,33 @@ class TransactionController extends Controller
     public function processTransfer()
     {
         $amount = (float) $this->request->getPost('amount');
-        $receiverPhone = $this->request->getPost('receiver_phone_number');
+        $receiverPhones = $this->request->getPost('receiver_phone_number'); // Peut être un tableau ou string
+        $includeWithdrawalFee = (bool) $this->request->getPost('include_withdrawal_fee');
+
+        if (!is_array($receiverPhones)) {
+            $receiverPhones = [$receiverPhones];
+        }
+
+        // Clean empty values
+        $receiverPhones = array_filter(array_map('trim', $receiverPhones));
 
         if ($amount <= 0) {
             return redirect()->back()->with('error', 'Le montant doit être supérieur à zéro.');
         }
-        if (!$receiverPhone) {
-            return redirect()->back()->with('error', 'Le numéro du destinataire est obligatoire.');
+        if (empty($receiverPhones)) {
+            return redirect()->back()->with('error', 'Veuillez renseigner au moins un destinataire.');
         }
 
         $clientId = session()->get('client_id');
-        $result = $this->transactionService->transfer($clientId, $receiverPhone, $amount);
+        
+        $multipleTransferService = new \App\Services\MultipleTransferService();
+        $result = $multipleTransferService->executeMultipleTransfer($clientId, $amount, $receiverPhones, $includeWithdrawalFee);
 
         if ($result['success']) {
-            return redirect()->to('/client/dashboard')->with('success', "Transfert de {$amount} Ar vers {$receiverPhone} réussi. Frais : {$result['fee']} Ar. Coût total : {$result['total']} Ar. Nouveau solde : {$result['balance_after']} Ar. Réf: {$result['reference']}");
+            $msg = "Transfert de " . number_format($amount, 2) . " Ar vers " . count($receiverPhones) . " destinataire(s) réussi. ";
+            $msg .= "Coût total débité : " . number_format($result['total_debited'], 2) . " Ar. ";
+            $msg .= "Nouveau solde : " . number_format($result['balance_after'], 2) . " Ar.";
+            return redirect()->to('/client/dashboard')->with('success', $msg);
         } else {
             return redirect()->back()->withInput()->with('error', $result['message']);
         }
