@@ -230,13 +230,13 @@ body.dark-mode .list-group-item {
   font-family: "Inter", sans-serif;
 }
 .list-group-item i.bi.text-success {
-  color: #1fa25c !important;
+  color: #99e336 !important;
 }
 .list-group-item i.bi.text-danger {
   color: #e8453c !important;
 }
 .list-group-item .text-success {
-  color: #1fa25c !important;
+  color: #99e336 !important;
 }
 .list-group-item .text-danger {
   color: #e8453c !important;
@@ -373,7 +373,7 @@ body.dark-mode .navbar-dark {
   overflow: hidden;
 }
 .alert.alert-success {
-  background-color: #1fa25c;
+  background-color: #99e336;
   color: #FFFFFF;
   border-color: #000000;
 }
@@ -392,7 +392,7 @@ body.dark-mode .alert.alert-info {
   border-color: #404040;
 }
 body.dark-mode .alert.alert-success {
-  background-color: #1fa25c;
+  background-color: #99e336;
   color: #FFFFFF;
 }
 body.dark-mode .alert.alert-danger {
