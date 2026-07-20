@@ -4,9 +4,6 @@
 <div class="row justify-content-center mt-5">
     <div class="col-md-8">
         <div class="card text-center p-4">
-            <div class="mb-4">
-                <i class="bi bi-wallet2 fs-1" style="color: #0C4650;"></i>
-            </div>
             <h2 class="mb-4">Bienvenue sur Mobile Money</h2>
             <p class="text-muted">Connectez-vous ou inscrivez-vous automatiquement avec votre numéro de téléphone.</p>
             
@@ -18,11 +15,11 @@
                         <input type="text" name="phone_number" class="form-control" placeholder="Numéro de téléphone (ex: 0340000001)" required pattern="^[0-9]{10}$" title="Veuillez saisir un numéro à 10 chiffres.">
                     </div>
                 </div>
-                <button type="submit" class="btn btn-success btn-lg w-100">Accéder à mon compte</button>
+                <button type="submit" class="btn btn-primary btn-lg w-100 rounded-pill">Accéder à mon compte</button>
             </form>
             
             <hr class="mt-5">
-            <a href="<?= site_url('operator/login') ?>" class="text-decoration-none"><small>Espace Opérateur</small></a>
+            <a href="<?= site_url('operator/login') ?>" class="text-secondary text-decoration-none"><small>Espace Opérateur</small></a>
         </div>
     </div>
 </div>

@@ -8,19 +8,19 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="/assets/css/app.css">
     <style>
-        .app-container { max-width: 600px; margin: 0 auto; padding-top: 20px; }
+        .app-container { max-width: 900px; margin: 0 auto; padding-top: 20px; }
     </style>
 </head>
 <body>
 
-<button class="theme-toggle" onclick="toggleTheme()">
+<button type="button" class="theme-toggle" onclick="toggleTheme()">
     <i class="bi bi-moon" id="theme-icon"></i>
     <span id="theme-text">Sombre</span>
 </button>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container app-container pb-0 pt-0">
-        <a class="navbar-brand" href="<?= site_url('client/dashboard') ?>"><i class="bi bi-wallet2"></iMobile Money</a>
+        <a class="navbar-brand" href="<?= site_url('client/dashboard') ?>"><i class="bi bi-wallet2"></i> Mobile Money</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
