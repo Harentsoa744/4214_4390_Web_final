@@ -13,6 +13,12 @@ class ClientController extends Controller
         $clientModel = new ClientModel();
         $client = $clientModel->find(session()->get('client_id'));
 
+        // Si le client n'existe plus en base (ex: après reset DB), rediriger vers login
+        if (!$client) {
+            session()->destroy();
+            return redirect()->to('/login')->with('error', 'Session expirée. Veuillez vous reconnecter.');
+        }
+
         return view('client/dashboard', ['client' => $client]);
     }
 
