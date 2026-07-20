@@ -93,4 +93,79 @@
     </div>
 </div>
 
+<div class="row mt-5">
+    <div class="col-12">
+        <div class="border-bottom pb-2 mb-3">
+            <h3 class="h4"><i class="bi bi-wallet2 text-success me-2"></i> Situation des gains par type de frais</h3>
+        </div>
+        <div class="card">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Date & Heure</th>
+                                <th>Référence</th>
+                                <th>Type d'opération</th>
+                                <th>Client (Expéditeur)</th>
+                                <th>Bénéficiaire</th>
+                                <th class="text-end">Montant (Ar)</th>
+                                <th class="text-end">Frais Générés / Gain (Ar)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if(empty($feeTransactions)): ?>
+                                <tr>
+                                    <td colspan="7" class="text-center py-4 text-muted">
+                                        <i class="bi bi-info-circle fs-4 d-block mb-2"></i>
+                                        Aucun gain généré sur la période sélectionnée.
+                                    </td>
+                                </tr>
+                            <?php else: ?>
+                                <?php foreach($feeTransactions as $t): ?>
+                                    <tr>
+                                        <td><?= date('d/m/Y H:i:s', strtotime($t['created_at'])) ?></td>
+                                        <td><code><?= htmlspecialchars($t['transaction_reference']) ?></code></td>
+                                        <td>
+                                            <?php if($t['operation_code'] == 'WITHDRAWAL'): ?>
+                                                <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 px-2 py-1">Retrait</span>
+                                            <?php elseif($t['operation_code'] == 'TRANSFER'): ?>
+                                                <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-2 py-1">Transfert</span>
+                                            <?php else: ?>
+                                                <span class="badge bg-secondary"><?= htmlspecialchars($t['operation_name']) ?></span>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td>
+                                            <?= htmlspecialchars($t['sender_phone'] ?? 'N/A') ?>
+                                        </td>
+                                        <td>
+                                            <?= htmlspecialchars($t['receiver_phone'] ?? 'N/A') ?>
+                                        </td>
+                                        <td class="text-end fw-semibold">
+                                            <?= number_format($t['amount'], 2, ',', ' ') ?> Ar
+                                        </td>
+                                        <td class="text-end fw-bold text-success">
+                                            + <?= number_format($t['fee_amount'], 2, ',', ' ') ?> Ar
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </tbody>
+                        <?php if(!empty($feeTransactions)): ?>
+                            <tfoot class="table-light fw-bold">
+                                <tr>
+                                    <td colspan="6" class="text-end">Total des Gains sur la sélection :</td>
+                                    <td class="text-end text-success fs-5">
+                                        + <?= number_format(array_sum(array_column($feeTransactions, 'fee_amount')), 2, ',', ' ') ?> Ar
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        <?php endif; ?>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <?= $this->endSection() ?>
