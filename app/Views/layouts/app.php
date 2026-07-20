@@ -18,15 +18,18 @@
     <span id="theme-text">Sombre</span>
 </button>
 
+<?php if(session()->get('client_id')): ?>
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container app-container pb-0 pt-0">
-        <a class="navbar-brand" href="<?= site_url('client/dashboard') ?>"><i class="bi bi-wallet2"></i> Mobile Money</a>
+        <a class="navbar-brand d-flex align-items-center" href="<?= site_url('client/dashboard') ?>">
+            <img src="/assets/utils/Gemini_Generated_Image_om0k4som0k4som0k.png" alt="Mobile Money Logo" style="max-height: 60px; width: auto; border-radius: 8px; margin-right: 10px;">
+        </a>
+
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <?php if(session()->get('client_id')): ?>
                     <li class="nav-item">
                         <a class="nav-link" href="<?= site_url('client/dashboard') ?>">Tableau de bord</a>
                     </li>
@@ -36,11 +39,11 @@
                     <li class="nav-item">
                         <a class="nav-link text-danger" href="<?= site_url('logout') ?>">Déconnexion</a>
                     </li>
-                <?php endif; ?>
             </ul>
         </div>
     </div>
 </nav>
+<?php endif; ?>
 
 <div class="container app-container mb-5">
     <?php if (session()->getFlashdata('success')): ?>

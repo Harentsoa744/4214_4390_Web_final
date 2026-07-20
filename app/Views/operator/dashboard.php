@@ -36,15 +36,15 @@
         <div class="card balance-card h-100">
             <div class="card-body">
                 <h6 class="card-title">Revenus Totaux (Frais)</h6>
-                <h3 class="card-text fw-bold"><?= number_format($stats['total_fees'] ?? 0, 2, ',', ' ') ?> Ar</h3>
+                <h3 class="card-text fw-bold text-white"><?= number_format($stats['total_fees'] ?? 0, 2, ',', ' ') ?> Ar</h3>
             </div>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="card h-100" style="background-color: #1fa25c; color: white; border: 2px solid black;">
+        <div class="card h-100" style="background-color: #0C4650; color: white; border: 2px solid black;">
             <div class="card-body">
                 <h6 class="card-title">Revenus Transferts</h6>
-                <h3 class="card-text fw-bold"><?= number_format($stats['fee_transfers'] ?? 0, 2, ',', ' ') ?> Ar</h3>
+                <h3 class="card-text fw-bold text-white"><?= number_format($stats['fee_transfers'] ?? 0, 2, ',', ' ') ?> Ar</h3>
             </div>
         </div>
     </div>
@@ -52,7 +52,7 @@
         <div class="card h-100" style="background-color: #0C4650; color: white; border: 2px solid black;">
             <div class="card-body">
                 <h6 class="card-title">Revenus Retraits</h6>
-                <h3 class="card-text fw-bold"><?= number_format($stats['fee_withdrawals'] ?? 0, 2, ',', ' ') ?> Ar</h3>
+                <h3 class="card-text fw-bold text-white"><?= number_format($stats['fee_withdrawals'] ?? 0, 2, ',', ' ') ?> Ar</h3>
             </div>
         </div>
     </div>
@@ -60,7 +60,7 @@
         <div class="card h-100" style="background-color: #898B8F; color: white; border: 2px solid black;">
             <div class="card-body">
                 <h6 class="card-title">Volume des Transactions</h6>
-                <h3 class="card-text fw-bold"><?= number_format($stats['total_volume'] ?? 0, 2, ',', ' ') ?> Ar</h3>
+                <h3 class="card-text fw-bold" style="color: #E6FF2A;"><?= number_format($stats['total_volume'] ?? 0, 2, ',', ' ') ?> Ar</h3>
             </div>
         </div>
     </div>
