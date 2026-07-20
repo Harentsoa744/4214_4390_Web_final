@@ -5,6 +5,9 @@
     <div class="bg-light p-3 d-flex justify-content-between align-items-center border-bottom">
         <div class="d-flex align-items-center">
             <a href="<?= site_url('client/dashboard') ?>" class="text-dark me-3"><i class="bi bi-arrow-left fs-4"></i></a>
+            <div class="me-2">
+                <i class="bi bi-clock-history fs-3" style="color: #0C4650;"></i>
+            </div>
             <h5 class="mb-0">Historique</h5>
         </div>
         <div>

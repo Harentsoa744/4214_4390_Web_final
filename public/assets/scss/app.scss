@@ -1,0 +1,633 @@
+// =============================================================
+// MOBILE MONEY — DESIGN SYSTEM (Flat Design)
+// Palette : Lime #E6FF2A · Teal profond #0C4650 · Blanc cassé #F8F7F3
+//           Gris #898B8F · Noir #000000
+// =============================================================
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+// -------------------------------------------------------------
+// 1. TOKENS - LIGHT MODE
+// -------------------------------------------------------------
+$lime:        #E6FF2A;
+$teal:        #0C4650;
+$off-white:   #F8F7F3;
+$gray:        #898B8F;
+$black:       #000000;
+$white:       #FFFFFF;
+
+// Nuances dérivées (flat design = pas de dégradés, juste des teintes plates)
+$teal-light:  #14606f;
+$teal-dark:   #082e35;
+$lime-dark:   #c7de00;
+$gray-light:  #e4e3df;
+$danger:      #e8453c;
+$success:     #1fa25c;
+
+// Typo
+$font-display: 'Space Grotesk', sans-serif;
+$font-body:    'Inter', sans-serif;
+
+// Layout
+$radius-sm:   4px;
+$radius-md:   8px;
+$radius-pill: 999px;
+$border-w:    2px;
+
+// Aucune ombre en flat design : on utilise des bordures pleines
+$border-flat: $border-w solid $black;
+
+// -------------------------------------------------------------
+// DARK MODE TOKENS
+// -------------------------------------------------------------
+$dark-bg:         #1a1a1a;
+$dark-card:       #2d2d2d;
+$dark-text:       #e0e0e0;
+$dark-border:     #404040;
+$dark-teal:       #1a5c63;
+$dark-lime:       #c7de00;
+
+// -------------------------------------------------------------
+// 2. BASE
+// -------------------------------------------------------------
+body {
+  background-color: $off-white;
+  font-family: $font-body;
+  color: $black;
+  letter-spacing: -0.01em;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
+
+  &.dark-mode {
+    background-color: $dark-bg;
+    color: $dark-text;
+  }
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-display;
+  font-weight: 700;
+  color: $teal;
+  letter-spacing: -0.02em;
+
+  body.dark-mode & {
+    color: $dark-lime;
+  }
+}
+
+a {
+  color: $teal;
+  &:hover { color: $lime-dark; }
+
+  body.dark-mode & {
+    color: $dark-lime;
+    &:hover { color: $lime; }
+  }
+}
+
+hr {
+  border-top: $border-w solid $gray-light;
+  opacity: 1;
+
+  body.dark-mode & {
+    border-color: $dark-border;
+  }
+}
+
+// -------------------------------------------------------------
+// 3. CARTES — flat, bordure nette, pas d'ombre
+// -------------------------------------------------------------
+.card {
+  background-color: $white;
+  border: $border-flat;
+  border-radius: $radius-md;
+  box-shadow: none;
+  overflow: hidden;
+
+  body.dark-mode & {
+    background-color: $dark-card;
+    border-color: $dark-border;
+  }
+
+  &.p-0 { overflow: hidden; }
+}
+
+// Carte solde — signature visuelle : bloc plat teal + barre lime
+.balance-card {
+  background-color: $teal;
+  color: $white;
+  border: $border-flat;
+  border-top: 6px solid $lime;
+  border-radius: $radius-md;
+  position: relative;
+
+  body.dark-mode & {
+    background-color: $dark-teal;
+    border-color: $dark-border;
+  }
+
+  h5 {
+    color: rgba($white, 0.7);
+    font-family: $font-body;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+  }
+
+  h1 {
+    color: $lime;
+    font-family: $font-display;
+  }
+
+  p, .text-white-50 {
+    color: rgba($white, 0.6) !important;
+  }
+}
+
+// Cartes d'action (Dépôt / Retrait / Transfert / Historique)
+.action-card {
+  background-color: $white;
+  border: $border-flat;
+  border-radius: $radius-md;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+  cursor: pointer;
+
+  body.dark-mode & {
+    background-color: $dark-card;
+    border-color: $dark-border;
+  }
+
+  i { color: $teal !important; }
+
+  h6 {
+    font-family: $font-display;
+    font-weight: 600;
+    color: $black;
+
+    body.dark-mode & {
+      color: $dark-text;
+    }
+  }
+
+  &:hover {
+    transform: translate(-2px, -2px);
+    background-color: $lime;
+    box-shadow: 4px 4px 0 $black;
+
+    i, h6 { color: $black !important; }
+  }
+}
+
+// -------------------------------------------------------------
+// 4. BOUTONS — flat, pleins, pas de dégradé
+// -------------------------------------------------------------
+.btn {
+  font-family: $font-body;
+  font-weight: 600;
+  border-radius: $radius-pill;
+  border: $border-w solid transparent;
+  padding: 0.65rem 1.5rem;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+
+  &:active { transform: translateY(1px); }
+}
+
+.btn-primary {
+  background-color: $teal;
+  border-color: $teal;
+  color: $white;
+
+  body.dark-mode & {
+    background-color: $dark-teal;
+    border-color: $dark-teal;
+  }
+
+  &:hover, &:focus {
+    background-color: $teal-dark;
+    border-color: $teal-dark;
+    color: $lime;
+  }
+}
+
+.btn-success {
+  background-color: $lime;
+  border-color: $black;
+  color: $black;
+
+  &:hover, &:focus {
+    background-color: $lime-dark;
+    border-color: $black;
+    color: $black;
+  }
+}
+
+.btn-danger {
+  background-color: $danger;
+  border-color: $danger;
+  color: $white;
+}
+
+.btn-secondary {
+  background-color: $white;
+  border-color: $gray;
+  color: $teal;
+
+  body.dark-mode & {
+    background-color: $dark-card;
+    border-color: $dark-border;
+    color: $dark-lime;
+  }
+
+  &:hover { background-color: $gray-light; }
+}
+
+// -------------------------------------------------------------
+// 5. FORMULAIRES — flat, bordures franches
+// -------------------------------------------------------------
+.form-control,
+.form-select {
+  background-color: $white;
+  border: $border-w solid $gray-light;
+  border-radius: $radius-sm;
+  font-family: $font-body;
+  color: $black;
+
+  body.dark-mode & {
+    background-color: $dark-card;
+    border-color: $dark-border;
+    color: $dark-text;
+  }
+
+  &:focus {
+    border-color: $teal;
+    box-shadow: 0 0 0 3px rgba($teal, 0.15);
+  }
+}
+
+.input-group {
+  .input-group-text {
+    background-color: $teal;
+    color: $lime;
+    border: $border-w solid $teal;
+    border-radius: $radius-sm 0 0 $radius-sm;
+
+    body.dark-mode & {
+      background-color: $dark-teal;
+      border-color: $dark-teal;
+    }
+  }
+
+  .form-control {
+    border-left: none;
+    border-radius: 0 $radius-sm $radius-sm 0;
+  }
+
+  &.input-group-lg .form-control {
+    font-size: 1.4rem;
+    font-family: $font-display;
+    font-weight: 600;
+  }
+}
+
+// -------------------------------------------------------------
+// 6. LISTE / HISTORIQUE
+// -------------------------------------------------------------
+.list-group-item {
+  background-color: transparent;
+  border-color: $gray-light;
+  border-width: 0 0 $border-w 0;
+
+  body.dark-mode & {
+    border-color: $dark-border;
+  }
+
+  &:last-child { border-bottom: none; }
+
+  h6 { font-family: $font-body; }
+
+  i.bi {
+    &.text-success { color: $success !important; }
+    &.text-danger  { color: $danger !important; }
+  }
+
+  .text-success { color: $success !important; }
+  .text-danger  { color: $danger !important; }
+  .text-muted   { color: $gray !important; }
+}
+
+// -------------------------------------------------------------
+// 7. EN-TÊTES DE SECTION (bg-light utilisé dans l'historique)
+// -------------------------------------------------------------
+.bg-light {
+  background-color: $off-white !important;
+  border-color: $gray-light !important;
+
+  body.dark-mode & {
+    background-color: $dark-card !important;
+    border-color: $dark-border !important;
+  }
+}
+
+// -------------------------------------------------------------
+// 8. PAGINATION — flat, carrés nets
+// -------------------------------------------------------------
+.pagination {
+  .page-link {
+    border: $border-w solid $black;
+    color: $black;
+    border-radius: $radius-sm;
+    margin: 0 3px;
+    font-weight: 600;
+
+    body.dark-mode & {
+      border-color: $dark-border;
+      color: $dark-text;
+    }
+  }
+
+  .page-item.active .page-link {
+    background-color: $lime;
+    border-color: $black;
+    color: $black;
+  }
+
+  .page-item.disabled .page-link {
+    color: $gray;
+    border-color: $gray-light;
+  }
+}
+
+// -------------------------------------------------------------
+// 9. UTILITAIRES
+// -------------------------------------------------------------
+.text-muted { color: $gray !important; }
+
+// Halo lime discret pour les liens "retour"
+.text-dark {
+  color: $black !important;
+  &:hover { color: $teal !important; }
+
+  body.dark-mode & {
+    color: $dark-text !important;
+    &:hover { color: $dark-lime !important; }
+  }
+}
+
+// -------------------------------------------------------------
+// 10. DARK MODE TOGGLE
+// -------------------------------------------------------------
+.theme-toggle {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  z-index: 1000;
+  background-color: $white;
+  border: $border-flat;
+  border-radius: $radius-pill;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-family: $font-body;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+
+  body.dark-mode & {
+    background-color: $dark-card;
+    border-color: $dark-border;
+    color: $dark-lime;
+  }
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  i {
+    font-size: 1.2rem;
+  }
+}
+
+// -------------------------------------------------------------
+// 11. NAVBAR OVERRIDE
+// -------------------------------------------------------------
+.navbar {
+  &.bg-primary {
+    background-color: $teal !important;
+    border-bottom: $border-w solid $black;
+    padding: 0.5rem 0;
+
+    body.dark-mode & {
+      background-color: $dark-teal !important;
+      border-color: $dark-border;
+    }
+  }
+
+  .navbar-brand {
+    color: $lime !important;
+    font-family: $font-display;
+    font-weight: 700;
+    font-size: 1.25rem;
+  }
+
+  .nav-link {
+    color: rgba($white, 0.8) !important;
+    font-weight: 500;
+    padding: 0.5rem 1rem !important;
+
+    &:hover {
+      color: $lime !important;
+    }
+  }
+}
+
+// Operator header
+.navbar-dark {
+  background-color: $teal !important;
+  border-bottom: $border-w solid $black;
+
+  body.dark-mode & {
+    background-color: $dark-teal !important;
+    border-color: $dark-border;
+  }
+
+  .navbar-brand {
+    color: $lime !important;
+    font-family: $font-display;
+    font-weight: 700;
+  }
+
+  .nav-link {
+    color: rgba($white, 0.8) !important;
+
+    &:hover {
+      color: $lime !important;
+    }
+  }
+}
+
+// -------------------------------------------------------------
+// 12. ALERT OVERRIDE
+// -------------------------------------------------------------
+.alert {
+  border: $border-w solid $black;
+  border-radius: $radius-md;
+  box-shadow: none;
+  overflow: hidden;
+
+  &.alert-success {
+    background-color: $success;
+    color: $white;
+    border-color: $black;
+  }
+
+  &.alert-danger {
+    background-color: $danger;
+    color: $white;
+    border-color: $black;
+  }
+
+  &.alert-info {
+    background-color: $teal;
+    color: $white;
+    border-color: $black;
+
+    body.dark-mode & {
+      background-color: $dark-teal;
+      border-color: $dark-border;
+    }
+  }
+
+  body.dark-mode & {
+    &.alert-success {
+      background-color: $success;
+      color: $white;
+    }
+
+    &.alert-danger {
+      background-color: $danger;
+      color: $white;
+    }
+  }
+}
+
+// -------------------------------------------------------------
+// 13. TABLE OVERRIDE
+// -------------------------------------------------------------
+.table {
+  margin-bottom: 0;
+  
+  thead th {
+    border-bottom: $border-w solid $black;
+    font-weight: 600;
+    color: $teal;
+
+    body.dark-mode & {
+      border-color: $dark-border;
+      color: $dark-lime;
+    }
+  }
+
+  tbody tr {
+    border-bottom: 1px solid $gray-light;
+
+    body.dark-mode & {
+      border-color: $dark-border;
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}
+
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+// -------------------------------------------------------------
+// 14. CONTAINER FIXES
+// -------------------------------------------------------------
+.container {
+  max-width: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 576px) {
+  .container {
+    max-width: 540px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 720px;
+  }
+}
+
+@media (min-width: 992px) {
+  .container {
+    max-width: 960px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1140px;
+  }
+}
+
+@media (min-width: 1400px) {
+  .container {
+    max-width: 1320px;
+  }
+}
+
+// -------------------------------------------------------------
+// 15. OPERATOR SIDEBAR FIXES
+// -------------------------------------------------------------
+.sidebar {
+  background-color: $off-white !important;
+  border-right: $border-w solid $black;
+
+  body.dark-mode & {
+    background-color: $dark-card !important;
+    border-color: $dark-border;
+  }
+
+  .nav-link {
+    color: $black !important;
+    border-radius: $radius-sm;
+    margin: 2px 8px;
+    padding: 8px 12px !important;
+
+    body.dark-mode & {
+      color: $dark-text !important;
+    }
+
+    &:hover {
+      background-color: $gray-light !important;
+      color: $teal !important;
+
+      body.dark-mode & {
+        background-color: $dark-border !important;
+        color: $dark-lime !important;
+      }
+    }
+
+    &.active {
+      background-color: $teal !important;
+      color: $lime !important;
+      font-weight: 700;
+
+      body.dark-mode & {
+        background-color: $dark-teal !important;
+        color: $dark-lime !important;
+      }
+    }
+  }
+}

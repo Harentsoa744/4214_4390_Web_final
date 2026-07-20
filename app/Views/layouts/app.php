@@ -6,18 +6,21 @@
     <title><?= $title ?? 'Mobile Money' ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
     <style>
-        body { background-color: #f8f9fa; }
         .app-container { max-width: 600px; margin: 0 auto; padding-top: 20px; }
-        .card { border-radius: 15px; border: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .balance-card { background: linear-gradient(135deg, #0d6efd 0%, #0dcaf0 100%); color: white; }
     </style>
 </head>
 <body>
 
+<button class="theme-toggle" onclick="toggleTheme()">
+    <i class="bi bi-moon" id="theme-icon"></i>
+    <span id="theme-text">Sombre</span>
+</button>
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container app-container pb-0 pt-0">
-        <a class="navbar-brand" href="<?= site_url('client/dashboard') ?>"><i class="bi bi-wallet2"></i> Mobile Money</a>
+        <a class="navbar-brand" href="<?= site_url('client/dashboard') ?>"><i class="bi bi-wallet2"></iMobile Money</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -51,5 +54,33 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function toggleTheme() {
+        document.body.classList.toggle('dark-mode');
+        const icon = document.getElementById('theme-icon');
+        const text = document.getElementById('theme-text');
+        
+        if (document.body.classList.contains('dark-mode')) {
+            icon.classList.remove('bi-moon');
+            icon.classList.add('bi-sun');
+            text.textContent = 'Clair';
+            localStorage.setItem('theme', 'dark');
+        } else {
+            icon.classList.remove('bi-sun');
+            icon.classList.add('bi-moon');
+            text.textContent = 'Sombre';
+            localStorage.setItem('theme', 'light');
+        }
+    }
+
+    // Load saved theme
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('theme-icon').classList.remove('bi-moon');
+        document.getElementById('theme-icon').classList.add('bi-sun');
+        document.getElementById('theme-text').textContent = 'Clair';
+    }
+</script>
 </body>
 </html>

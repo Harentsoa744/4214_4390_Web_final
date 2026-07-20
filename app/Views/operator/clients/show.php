@@ -4,13 +4,14 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">
         <a href="<?= site_url('operator/clients') ?>" class="text-dark text-decoration-none me-2"><i class="bi bi-arrow-left"></i></a>
+        <i class="bi bi-person-circle me-2" style="color: #0C4650;"></i>
         Détails du Client: <?= htmlspecialchars($client['phone_number']) ?>
     </h1>
 </div>
 
 <div class="row mb-4">
     <div class="col-md-4">
-        <div class="card text-bg-primary">
+        <div class="card balance-card">
             <div class="card-body text-center">
                 <h6>Solde Actuel</h6>
                 <h2 class="fw-bold"><?= number_format($client['balance'], 2, ',', ' ') ?> Ar</h2>
@@ -36,14 +37,14 @@
     </div>
 </div>
 
-<div class="card shadow-sm">
-    <div class="card-header bg-white">
+<div class="card">
+    <div class="card-header">
         <h5 class="mb-0">Historique des Transactions</h5>
     </div>
     <div class="card-body p-0">
         <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-                <thead class="table-light">
+            <table class="table align-middle mb-0">
+                <thead>
                     <tr>
                         <th>Date</th>
                         <th>Réf</th>
@@ -72,7 +73,7 @@
                         <td><?= date('d/m/Y H:i', strtotime($t['created_at'])) ?></td>
                         <td><small><?= $t['transaction_reference'] ?></small></td>
                         <td>
-                            <span class="badge bg-secondary"><?= $t['operation_code'] ?></span>
+                            <span class="badge" style="background-color: #898B8F; color: white; border: 2px solid black;"><?= $t['operation_code'] ?></span>
                         </td>
                         <td class="fw-bold <?= $color ?>">
                             <?= $sign ?> <?= number_format($t['amount'], 2, ',', ' ') ?>
@@ -92,7 +93,7 @@
                             </small>
                         </td>
                         <td>
-                            <span class="badge bg-success"><?= $t['status'] ?></span>
+                            <span class="badge" style="background-color: #1fa25c; color: white; border: 2px solid black;"><?= $t['status'] ?></span>
                         </td>
                     </tr>
                     <?php endforeach; ?>
@@ -106,7 +107,7 @@
         </div>
     </div>
     <?php if ($pager->getPageCount() > 1): ?>
-    <div class="card-footer bg-white">
+    <div class="card-footer">
         <?= $pager->links() ?>
     </div>
     <?php endif; ?>

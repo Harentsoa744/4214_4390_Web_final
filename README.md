@@ -12,7 +12,7 @@ Ce projet est une application web complète (Version 1) permettant de simuler :
 - **Backend :** PHP, CodeIgniter 4
 - **Base de données :** SQLite (embarqué)
 - **Frontend :** HTML5, CSS3, JavaScript Vanilla, Bootstrap 5
-
+php spark db:seed MobileMoneySeeder
 ## Structure
 
 Le code suit l'architecture MVC de CodeIgniter 4 :

@@ -4,6 +4,9 @@
 <div class="card mt-4 p-4">
     <div class="d-flex align-items-center mb-4">
         <a href="<?= site_url('client/dashboard') ?>" class="text-dark me-3"><i class="bi bi-arrow-left fs-4"></i></a>
+        <div class="me-3">
+            <i class="bi bi-box-arrow-in-down fs-2" style="color: #0C4650;"></i>
+        </div>
         <h4 class="mb-0">Effectuer un Dépôt</h4>
     </div>
 
@@ -18,7 +21,7 @@
             </div>
         </div>
 
-        <button type="submit" class="btn btn-success btn-lg w-100 rounded-pill">Valider le dépôt</button>
+        <button type="submit" class="btn btn-success btn-lg w-100">Valider le dépôt</button>
     </form>
 </div>
 <?= $this->endSection() ?>

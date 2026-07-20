@@ -4,6 +4,9 @@
 <div class="card mt-4 p-4">
     <div class="d-flex align-items-center mb-4">
         <a href="<?= site_url('client/dashboard') ?>" class="text-dark me-3"><i class="bi bi-arrow-left fs-4"></i></a>
+        <div class="me-3">
+            <i class="bi bi-box-arrow-up fs-2" style="color: #0C4650;"></i>
+        </div>
         <h4 class="mb-0">Effectuer un Retrait</h4>
     </div>
 
@@ -23,7 +26,7 @@
             <div class="form-text">Les frais de retrait seront déduits de votre solde.</div>
         </div>
 
-        <button type="submit" class="btn btn-danger btn-lg w-100 rounded-pill">Valider le retrait</button>
+        <button type="submit" class="btn btn-danger btn-lg w-100">Valider le retrait</button>
     </form>
 </div>
 <?= $this->endSection() ?>

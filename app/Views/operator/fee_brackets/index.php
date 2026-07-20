@@ -2,13 +2,16 @@
 
 <?= $this->section('content') ?>
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">Barèmes de frais</h1>
+    <div class="d-flex align-items-center">
+        <i class="bi bi-currency-exchange fs-2 me-3" style="color: #0C4650;"></i>
+        <h1 class="h2 mb-0">Barèmes de frais</h1>
+    </div>
 </div>
 
 <div class="row">
     <div class="col-md-4">
-        <div class="card shadow-sm">
-            <div class="card-header bg-white">
+        <div class="card">
+            <div class="card-header">
                 <h5 class="mb-0">Ajouter une tranche</h5>
             </div>
             <div class="card-body">
@@ -35,17 +38,17 @@
                         <label class="form-label">Frais (Ar)</label>
                         <input type="number" name="fee_amount" class="form-control" value="<?= old('fee_amount', '0') ?>" min="0" required>
                     </div>
-                    <button type="submit" class="btn btn-primary w-100">Ajouter</button>
+                    <button type="submit" class="btn btn-success w-100">Ajouter</button>
                 </form>
             </div>
         </div>
     </div>
     <div class="col-md-8">
-        <div class="card shadow-sm">
+        <div class="card">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle table-sm">
-                        <thead class="table-light">
+                    <table class="table align-middle table-sm">
+                        <thead>
                             <tr>
                                 <th>Opération</th>
                                 <th>Min (Ar)</th>
@@ -64,7 +67,7 @@
                                 <td class="text-end">
                                     <form action="<?= site_url('operator/fees/delete/'.$b['id']) ?>" method="post" class="d-inline" onsubmit="return confirm('Supprimer ce barème ?');">
                                         <?= csrf_field() ?>
-                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                        <button type="submit" class="btn btn-sm" style="background-color: #e8453c; color: white; border: 2px solid black;">
                                             <i class="bi bi-trash"></i>
                                         </button>
                                     </form>

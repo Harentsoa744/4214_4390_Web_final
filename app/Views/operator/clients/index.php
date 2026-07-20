@@ -2,26 +2,29 @@
 
 <?= $this->section('content') ?>
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">Comptes Clients</h1>
+    <div class="d-flex align-items-center">
+        <i class="bi bi-people fs-2 me-3" style="color: #0C4650;"></i>
+        <h1 class="h2 mb-0">Comptes Clients</h1>
+    </div>
 </div>
 
-<div class="card shadow-sm mb-4">
+<div class="card mb-4">
     <div class="card-body">
         <form method="get" action="<?= site_url('operator/clients') ?>" class="d-flex w-50">
             <input type="text" name="search" class="form-control me-2" placeholder="Rechercher un numéro de téléphone..." value="<?= htmlspecialchars($search ?? '') ?>">
             <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i></button>
             <?php if($search): ?>
-                <a href="<?= site_url('operator/clients') ?>" class="btn btn-outline-secondary ms-2">Effacer</a>
+                <a href="<?= site_url('operator/clients') ?>" class="btn btn-secondary ms-2">Effacer</a>
             <?php endif; ?>
         </form>
     </div>
 </div>
 
-<div class="card shadow-sm">
+<div class="card">
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-hover align-middle">
-                <thead class="table-light">
+            <table class="table align-middle">
+                <thead>
                     <tr>
                         <th>ID</th>
                         <th>Téléphone</th>
@@ -46,7 +49,7 @@
                         </td>
                         <td><?= date('d/m/Y H:i', strtotime($c['created_at'])) ?></td>
                         <td class="text-end">
-                            <a href="<?= site_url('operator/clients/'.$c['id']) ?>" class="btn btn-sm btn-info text-white">
+                            <a href="<?= site_url('operator/clients/'.$c['id']) ?>" class="btn btn-sm" style="background-color: #0C4650; color: white; border: 2px solid black;">
                                 <i class="bi bi-eye"></i> Historique
                             </a>
                         </td>

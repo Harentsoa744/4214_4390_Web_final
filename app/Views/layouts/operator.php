@@ -6,19 +6,25 @@
     <title>Dashboard Opérateur - Mobile Money</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
     <style>
         body { font-size: .875rem; }
-        .sidebar { position: fixed; top: 0; bottom: 0; left: 0; z-index: 100; padding: 48px 0 0; box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1); }
+        .sidebar { position: fixed; top: 0; bottom: 0; left: 0; z-index: 100; padding: 48px 0 0; }
         .sidebar-sticky { position: relative; top: 0; height: calc(100vh - 48px); padding-top: .5rem; overflow-x: hidden; overflow-y: auto; }
-        .sidebar .nav-link { font-weight: 500; color: #333; }
-        .sidebar .nav-link.active { color: #0d6efd; }
+        .sidebar .nav-link { font-weight: 500; }
+        .sidebar .nav-link.active { font-weight: 700; }
         main { margin-left: 16.66666667%; }
     </style>
 </head>
 <body>
 
+<button class="theme-toggle" onclick="toggleTheme()">
+    <i class="bi bi-moon" id="theme-icon"></i>
+    <span id="theme-text">Sombre</span>
+</button>
+
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">Opérateur Mobile Money</a>
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#"><i class="bi bi-wallet2"></i> Opérateur Mobile Money</a>
     <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -77,5 +83,33 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function toggleTheme() {
+        document.body.classList.toggle('dark-mode');
+        const icon = document.getElementById('theme-icon');
+        const text = document.getElementById('theme-text');
+        
+        if (document.body.classList.contains('dark-mode')) {
+            icon.classList.remove('bi-moon');
+            icon.classList.add('bi-sun');
+            text.textContent = 'Clair';
+            localStorage.setItem('theme', 'dark');
+        } else {
+            icon.classList.remove('bi-sun');
+            icon.classList.add('bi-moon');
+            text.textContent = 'Sombre';
+            localStorage.setItem('theme', 'light');
+        }
+    }
+
+    // Load saved theme
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('theme-icon').classList.remove('bi-moon');
+        document.getElementById('theme-icon').classList.add('bi-sun');
+        document.getElementById('theme-text').textContent = 'Clair';
+    }
+</script>
 </body>
 </html>
