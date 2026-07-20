@@ -124,6 +124,3 @@ _modules/*
 
 /results/
 /phpunit.xml
-
-/app/config/App.php
-*.env
