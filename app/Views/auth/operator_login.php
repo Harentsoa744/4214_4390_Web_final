@@ -35,14 +35,14 @@
             <label class="form-label text-muted">Nom d'utilisateur</label>
             <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-person"></i></span>
-                <input type="text" name="username" class="form-control" required>
+                <input type="text" name="username" value="admin" class="form-control" required>
             </div>
         </div>
         <div class="mb-3">
             <label class="form-label text-muted">Mot de passe</label>
             <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-key"></i></span>
-                <input type="password" name="password" class="form-control" required>
+                <input type="password" name="password" value="admin123" class="form-control" required>
             </div>
         </div>
         <button type="submit" class="btn btn-primary w-100">Se connecter</button>
