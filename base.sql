@@ -143,6 +143,19 @@ CREATE INDEX IF NOT EXISTS idx_transactions_sender ON transactions(sender_client
 CREATE INDEX IF NOT EXISTS idx_transactions_receiver ON transactions(receiver_client_id);
 CREATE INDEX IF NOT EXISTS idx_fee_brackets_operation ON fee_brackets(operation_type_id);
 
+
+CREATE TABLE IF NOT EXISTS promotions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    source_operator_id INTEGER NOT NULL,
+    destination_operator_id INTEGER NOT NULL,
+    promotion_percentage DECIMAL(5, 2) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (source_operator_id) REFERENCES operators(id) ON DELETE CASCADE,
+    FOREIGN KEY (destination_operator_id) REFERENCES operators(id) ON DELETE CASCADE
+);
+
+
 -- ==========================================
 -- INSERTION DES DONNÉES INITIALES (V2)
 -- ==========================================
@@ -213,5 +226,6 @@ INSERT INTO clients (phone_number, balance) VALUES
 ('0340000001', 50000.00),
 ('0320000002', 150000.00),
 ('0330000003', 0.00);
-\ n - -   T a b l e   d e s   c o m m i s s i o n s   ( V 3 ) \ n C R E A T E   T A B L E   I F   N O T   E X I S T S   c o m m i s s i o n s   ( \ n         i d   I N T E G E R   P R I M A R Y   K E Y   A U T O I N C R E M E N T , \ n         o p e r a t o r _ i d   I N T E G E R   N O T   N U L L , \ n         c o m m i s s i o n _ p e r c e n t a g e   D E C I M A L ( 5 ,   2 )   N O T   N U L L   D E F A U L T   5 . 0 0 , \ n         i s _ a c t i v e   B O O L E A N   D E F A U L T   1 , \ n         c r e a t e d _ a t   D A T E T I M E   D E F A U L T   C U R R E N T _ T I M E S T A M P , \ n         u p d a t e d _ a t   D A T E T I M E   D E F A U L T   C U R R E N T _ T I M E S T A M P , \ n         F O R E I G N   K E Y   ( o p e r a t o r _ i d )   R E F E R E N C E S   o p e r a t o r s ( i d )   O N   D E L E T E   C A S C A D E \ n ) ; \ n  
+\ n - -   T a b l e   d e s   c o m m i s s i o n s   ( V 3 ) \ n C R E A T E   T A B L E   I F   N O T   E X I S T S   c o m m i s s i o n s   ( \ n         i d   I N T E G E R   P R I M A R Y   K E Y   A U T O I N C R E M E N T , \ n         o p e r a t o r _ i d   I N T E G E R   N O T   N U L L , \ n         c o m m i s s i o n _ p e r c e n t a g e   D E C I M A L ( 5 ,   2 )   N O T   N U L L   D E F A U L T   5 . 0 0 , \ n         i s _ a c t i v e   B O O L E A N   D E F A U L T   1 , \ n         c r e a t e d _ a t   D A T E T I M E   D E F A U L T   C U R R E N T _ T I M E S T A M P , \ n         u p d a t e d _ a t   D A T E T I M E   D E F A U L T   C U R R E N T _ T I M E S T A M P , \ n         F O R E I G N   K E Y   ( o p e r a t o r _ i d )   R E F E R E N C E S   o p e r a t o r s ( i d )   O N   D E L E T E   C A S C A D E \ n ) ; \ n 
+ 
  
