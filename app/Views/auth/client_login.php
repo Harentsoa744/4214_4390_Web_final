@@ -2,7 +2,7 @@
 
 <?= $this->section('content') ?>
 <div class="row justify-content-center mt-5">
-    <div class="col-lg-10 col-xl-9">
+    <div class="col-lg-12 col-xl-12">
         <div class="card p-0 overflow-hidden">
             <div class="row g-0 align-items-stretch">
                 <div class="col-md-6 d-none d-md-block"

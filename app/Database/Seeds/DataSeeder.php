@@ -82,7 +82,6 @@ class DataSeeder extends Seeder
             '031' => $opB->id ?? null,
             '034' => $opC->id ?? null,
             '035' => $opC->id ?? null,
-            '038' => $mainOperator->id,
         ];
 
         foreach ($prefixMapping as $prefix => $opId) {

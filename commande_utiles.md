@@ -32,8 +32,10 @@ php spark db:seed DatabaseSeeder
 ### Option A : Rollback + Migrate + Seed (recommandé)
 ```bash
 php spark migrate:rollback
+php spark migrate:refresh --seed
 php spark migrate
-php spark db:seed DatabaseSeeder
+php spark db:seed DataSeeder
+
 ```
 
 ### Option B : Supprimer le fichier SQLite et tout recréer
