@@ -85,3 +85,19 @@ php spark db:table
 - **Fichier SQLite** : La base est stockée dans `writable/database/mobile_money.sqlite`
 - **Compte opérateur par défaut** : `admin` / `admin123`
 - **Clients de test** : `0340000001`, `0320000002`, `0330000003`
+
+
+
+
+
+
+
+
+
+
+
+--ignore modif App
+git update-index --skip-worktree app/Config/App.php
+
+--ignore modif .env
+git update-index --skip-worktree .env
