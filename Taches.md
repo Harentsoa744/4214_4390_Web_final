@@ -3,25 +3,25 @@
 ## Version 2
 
 ### Apinga (Backend & Base de données)
-- Création de la migration V2 (`operators`, `transfer_batches`, `settlements`, `operator_commissions`)
-- Création du `Version2Seeder` pour peupler les nouveaux opérateurs et configurer les commissions
-- Création des nouveaux Modèles (TransferBatchModel, SettlementModel, OperatorCommissionModel)
+- Création de migration
+- Création du seeder
+- Création des nouveaux Models
 - Développement du `OperatorResolverService` pour identifier les opérateurs via préfixes
 - Développement du `TransferCostCalculatorService` pour la gestion complexe des frais et commissions (Inter-opérateur, frais de retrait)
 - Développement du `MultipleTransferService` garantissant l'atomicité des envois multiples (Batch)
 - Développement du `SettlementService` pour l'agrégation des reversements inter-opérateurs
-- Mise à jour du `TransactionController` et `DashboardController`
+- modification du `TransactionController` et `DashboardController`
 
 ### Harentsoa (Frontend & Contrôleurs)
-- Mise à jour du Dashboard Opérateur (Onglets Interne / Externe, Tableaux détaillés)
+- modification du Dashboard Opérateur (Onglets Interne / Externe, Tableaux détaillés)
 - Interface de configuration des commissions inter-opérateurs
 - Interface de gestion des Opérateurs
 - Interface de suivi des Reversements (Settlements) avec boutons d'action
-- Mise à jour du formulaire de transfert Client :
+- modification du formulaire de transfert Client :
   - Ajout dynamique de destinataires en Javascript
-  - Aperçu estimatif des transferts
+  - voir des transferts
   - Case à cocher "Inclure les frais de retrait"
-- Mise à jour de l'historique Client (Badge "Externe", affichage des commissions)
+- modification de l'historique Client (Badge "Externe", affichage des commissions)
 
 ---
 
