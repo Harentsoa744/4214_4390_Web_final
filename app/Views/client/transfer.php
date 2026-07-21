@@ -17,6 +17,14 @@
     <form action="<?= site_url('client/transfer') ?>" method="post" id="transferForm">
         <?= csrf_field() ?>
         
+        <?php
+        $prefixOptions = '';
+        foreach ($prefixes as $p) {
+            $isMain = $p['is_main_operator'] ? '1' : '0';
+            $prefixOptions .= '<option value="' . esc($p['prefix']) . '" data-is-main="' . $isMain . '">' . esc($p['prefix']) . '</option>';
+        }
+        ?>
+        
         <div class="mb-4">
             <label class="form-label text-muted fw-bold">Montant TOTAL à transférer (Ar)</label>
             <div class="input-group input-group-lg">
@@ -28,7 +36,7 @@
             </div>
         </div>
 
-        <div class="card bg-light mb-4 border-0">
+        <div class="card bg-light mb-4 border-0" id="withdrawalFeeContainer">
             <div class="card-body">
                 <div class="form-check form-switch form-switch-lg">
                     <input class="form-check-input" type="checkbox" role="switch" id="includeWithdrawalFee" name="include_withdrawal_fee" value="1">
@@ -51,7 +59,11 @@
             <!-- Premier destinataire par défaut -->
             <div class="input-group input-group-lg mb-3 recipient-row">
                 <span class="input-group-text bg-light"><i class="bi bi-person-fill text-muted"></i></span>
-                <input type="text" name="receiver_phone_number[]" class="form-control fw-bold" placeholder="Numéro (ex: 0340000002)" required pattern="^[0-9]{10}$">
+                <select class="form-select prefix-select" style="max-width: 140px;">
+                    <?= $prefixOptions ?>
+                </select>
+                <input type="text" class="form-control fw-bold phone-suffix" placeholder="Suite du numéro (ex: 0000002)" required pattern="^[0-9]{7}$">
+                <input type="hidden" name="receiver_phone_number[]" class="full-phone">
                 <button type="button" class="btn btn-outline-danger remove-btn" disabled><i class="bi bi-trash"></i></button>
             </div>
         </div>
@@ -76,6 +88,34 @@ document.addEventListener('DOMContentLoaded', function() {
     const totalAmountInput = document.getElementById('totalAmount');
     const previewAlert = document.getElementById('previewAlert');
     const previewContent = document.getElementById('previewContent');
+    const withdrawalFeeContainer = document.getElementById('withdrawalFeeContainer');
+    const withdrawalFeeCheckbox = document.getElementById('includeWithdrawalFee');
+
+    function updatePhoneNumbersAndFeeOption() {
+        let hasExternalOperator = false;
+        const rows = document.querySelectorAll('.recipient-row');
+        
+        rows.forEach(row => {
+            const select = row.querySelector('.prefix-select');
+            const suffix = row.querySelector('.phone-suffix');
+            const hidden = row.querySelector('.full-phone');
+            
+            if (select && suffix && hidden) {
+                hidden.value = select.value + suffix.value;
+                const option = select.options[select.selectedIndex];
+                if (option && option.getAttribute('data-is-main') === '0') {
+                    hasExternalOperator = true;
+                }
+            }
+        });
+
+        if (hasExternalOperator) {
+            withdrawalFeeContainer.classList.add('d-none');
+            withdrawalFeeCheckbox.checked = false;
+        } else {
+            withdrawalFeeContainer.classList.remove('d-none');
+        }
+    }
 
     function updatePreview() {
         const rows = document.querySelectorAll('.recipient-row');
@@ -117,22 +157,39 @@ document.addEventListener('DOMContentLoaded', function() {
         row.className = 'input-group input-group-lg mb-3 recipient-row';
         row.innerHTML = `
             <span class="input-group-text bg-light"><i class="bi bi-person-fill text-muted"></i></span>
-            <input type="text" name="receiver_phone_number[]" class="form-control fw-bold" placeholder="Numéro (ex: 0340000002)" required pattern="^[0-9]{10}$">
+            <select class="form-select prefix-select" style="max-width: 140px;">
+                <?= $prefixOptions ?>
+            </select>
+            <input type="text" class="form-control fw-bold phone-suffix" placeholder="Suite du numéro (ex: 0000002)" required pattern="^[0-9]{7}$">
+            <input type="hidden" name="receiver_phone_number[]" class="full-phone">
             <button type="button" class="btn btn-outline-danger remove-btn"><i class="bi bi-trash"></i></button>
         `;
         
         row.querySelector('.remove-btn').addEventListener('click', function() {
             row.remove();
+            updatePhoneNumbersAndFeeOption();
             updatePreview();
         });
         
+        row.querySelector('.prefix-select').addEventListener('change', updatePhoneNumbersAndFeeOption);
+        row.querySelector('.phone-suffix').addEventListener('input', updatePhoneNumbersAndFeeOption);
+        
         container.appendChild(row);
+        updatePhoneNumbersAndFeeOption();
         updatePreview();
     });
 
     totalAmountInput.addEventListener('input', updatePreview);
     
+    // Attach listeners to initial row
+    const initialRow = container.querySelector('.recipient-row');
+    if (initialRow) {
+        initialRow.querySelector('.prefix-select').addEventListener('change', updatePhoneNumbersAndFeeOption);
+        initialRow.querySelector('.phone-suffix').addEventListener('input', updatePhoneNumbersAndFeeOption);
+    }
+    
     // Initial setup
+    updatePhoneNumbersAndFeeOption();
     updatePreview();
 });
 </script>

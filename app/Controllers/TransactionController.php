@@ -67,7 +67,15 @@ class TransactionController extends Controller
     {
         $clientModel = new ClientModel();
         $client = $clientModel->find(session()->get('client_id'));
-        return view('client/transfer', ['client' => $client]);
+        
+        $phonePrefixModel = new \App\Models\PhonePrefixModel();
+        $prefixes = $phonePrefixModel->select('phone_prefixes.prefix, operators.is_main_operator, operators.name as operator_name')
+                                     ->join('operators', 'operators.id = phone_prefixes.operator_id')
+                                     ->where('phone_prefixes.is_active', 1)
+                                     ->where('operators.is_active', 1)
+                                     ->findAll();
+
+        return view('client/transfer', ['client' => $client, 'prefixes' => $prefixes]);
     }
 
     public function processTransfer()
