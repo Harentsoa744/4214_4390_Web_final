@@ -47,5 +47,13 @@
             </div>
         </a>
     </div>
+    <div class="col-6">
+        <a href="<?= site_url('client/epargne') ?>" class="text-decoration-none">
+            <div class="card text-center p-3 h-100 action-card">
+                <i class="bi bi-box-arrow-in-down fs-1 mb-2"></i>
+                <h6>Epargne conf</h6>
+            </div>
+        </a>
+    </div>
 </div>
 <?= $this->endSection() ?>

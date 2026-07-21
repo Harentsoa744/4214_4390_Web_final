@@ -64,6 +64,16 @@ CREATE TABLE IF NOT EXISTS operator_commissions (
     FOREIGN KEY (destination_operator_id) REFERENCES operators(id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS solde_epargne (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    client_id INTEGER NOT NULL,
+    epargne_percentage DECIMAL(5, 2) NOT NULL DEFAULT 0.0,
+    total_amount DECIMAL(15, 2) DEFAULT 0.00,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (client_id) REFERENCES clients(id) ON DELETE CASCADE,
+);
+
 -- 6. Table des reversements (Settlements)
 CREATE TABLE IF NOT EXISTS settlements (
     id INTEGER PRIMARY KEY AUTOINCREMENT,

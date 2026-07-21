@@ -29,6 +29,8 @@ $routes->group('client', ['filter' => 'clientAuth'], function($routes) {
     
     $routes->get('transfer', 'TransactionController::transfer');
     $routes->post('transfer', 'TransactionController::processTransfer');
+
+    $routes->get('epargne', 'EpargneController::index');
 });
 
 // ==========================================
@@ -75,4 +77,5 @@ $routes->group('operator', ['namespace' => 'App\Controllers\Operator', 'filter' 
     // V2: Settlements
     $routes->get('settlements', 'SettlementController::index');
     $routes->post('settlements/markAsSent/(:num)', 'SettlementController::markAsSent/$1');
+
 });
