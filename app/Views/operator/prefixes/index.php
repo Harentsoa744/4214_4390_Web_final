@@ -67,12 +67,12 @@
                                     <?php endif; ?>
                                 </td>
                                 <td class="text-end">
-                                    <form action="<?= site_url('operator/prefixes/toggle/'.$prefix['id']) ?>" method="post" class="d-inline">
+                                    <!-- <form action="<?= site_url('operator/prefixes/toggle/'.$prefix['id']) ?>" method="post" class="d-inline">
                                         <?= csrf_field() ?>
                                         <button type="submit" class="btn btn-sm" style="background-color: #E6FF2A; color: black; border: 2px solid black;" title="<?= $prefix['is_active'] ? 'Désactiver' : 'Activer' ?>">
                                             <i class="bi bi-power"></i>
                                         </button>
-                                    </form>
+                                    </form> -->
                                     <form action="<?= site_url('operator/prefixes/delete/'.$prefix['id']) ?>" method="post" class="d-inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce préfixe ?');">
                                         <?= csrf_field() ?>
                                         <button type="submit" class="btn btn-sm" style="background-color: #e8453c; color: white; border: 2px solid black;" title="Supprimer">

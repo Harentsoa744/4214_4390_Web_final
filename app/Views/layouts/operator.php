@@ -42,7 +42,7 @@
                 <ul class="nav flex-column">
                     <li class="nav-item">
                         <a class="nav-link <?= url_is('operator/dashboard') ? 'active' : '' ?>" href="<?= site_url('operator/dashboard') ?>">
-                            <i class="bi bi-house-door"></i> Vue d'ensemble
+                            <i class="bi bi-house-door"></i> Dashboard
                         </a>
                     </li>
                     <li class="nav-item">
