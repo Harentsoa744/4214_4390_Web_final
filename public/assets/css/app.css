@@ -493,4 +493,41 @@ body.dark-mode .sidebar .nav-link.active {
   color: #c7de00 !important;
 }
 
+.error-code {
+  font-size: clamp(5rem, 15vw, 8rem);
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  text-shadow: 4px 4px 0 #000000;
+}
+body.dark-mode .error-code {
+  text-shadow: 4px 4px 0 #000000;
+}
+
+.bg-teal {
+  background-color: #0C4650;
+}
+body.dark-mode .bg-teal {
+  background-color: #1a5c63;
+}
+
+.text-lime {
+  color: #E6FF2A !important;
+}
+
+.border-flat-sm {
+  border: 1.5px solid #000000;
+}
+
+.error-receipt {
+  background-color: #F8F7F3;
+  border: 2px dashed #898B8F;
+}
+body.dark-mode .error-receipt {
+  background-color: #1a1a1a;
+  border-color: #404040;
+}
+body.dark-mode .error-receipt .text-teal {
+  color: #c7de00 !important;
+}
+
 /*# sourceMappingURL=app.css.map */

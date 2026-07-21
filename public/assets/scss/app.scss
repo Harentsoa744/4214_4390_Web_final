@@ -631,3 +631,48 @@ hr {
     }
   }
 }
+
+// -------------------------------------------------------------
+// 16. PAGE 404 SPECIFIQUE
+// -------------------------------------------------------------
+.error-code {
+  font-size: clamp(5rem, 15vw, 8rem);
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  text-shadow: 4px 4px 0 $black;
+
+  body.dark-mode & {
+    text-shadow: 4px 4px 0 $black;
+  }
+}
+
+.bg-teal {
+  background-color: $teal;
+  
+  body.dark-mode & {
+    background-color: $dark-teal;
+  }
+}
+
+.text-lime {
+  color: $lime !important;
+}
+
+.border-flat-sm {
+  border: 1.5px solid $black;
+}
+
+// Ticket factice avec style fond neutre
+.error-receipt {
+  background-color: $off-white;
+  border: $border-w dashed $gray;
+
+  body.dark-mode & {
+    background-color: $dark-bg;
+    border-color: $dark-border;
+
+    .text-teal {
+      color: $dark-lime !important;
+    }
+  }
+}
